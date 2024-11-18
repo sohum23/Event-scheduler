@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input {
+            margin-bottom: 10px;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Scheduler</h1>
+    <form id="eventForm">
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" placeholder="Enter event name" required>
+
+        <label for="eventDate">Event Date:</label>
+        <input type="date" id="eventDate" required>
+
+        <button type="submit">Add Event</button>
+    </form>
+
+    <h2>Upcoming Events</h2>
+    <table id="eventTable">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Event Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Events will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        const eventForm = document.getElementById('eventForm');
+        const eventTableBody = document.querySelector('#eventTable tbody');
+        let events = [];
+
+        // Handle form submission
+        eventForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get event details
+            const eventName = document.getElementById('eventName').value;
+            const eventDate = document.getElementById('eventDate').value;
+
+            // Add event to the list
+            events.push({ name: eventName, date: new Date(eventDate) });
+
+            // Sort events by date
+            events.sort((a, b) => a.date - b.date);
+
+            // Update the table
+            updateTable();
+
+            // Clear the form
+            eventForm.reset();
+        });
+
+        // Update the events table
+        function updateTable() {
+            eventTableBody.innerHTML = '';
+            events.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.name}</td>
+                    <td>${event.date.toISOString().split('T')[0]}</td>
+                `;
+                eventTableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
